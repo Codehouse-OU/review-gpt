@@ -1,0 +1,6 @@
+/ReviewGPT.iml
+/.idea/
+/venv/
+/configuration.env
+__pycache__/
+*.http
