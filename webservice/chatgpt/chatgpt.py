@@ -1,6 +1,6 @@
 from openai import AzureOpenAI
-from webservice.configuration.configuration import Configuration as config
-
+from webservice.configuration.configuration import Configuration
+config = Configuration()
 
 class ChatGptService(object):
     def __init__(self):
