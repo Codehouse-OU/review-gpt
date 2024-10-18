@@ -6,12 +6,13 @@ from aiohttp import web
 from gidgethub import routing, sansio
 from gidgethub import aiohttp as gh_aiohttp
 
-from webservice.chatgpt.chatgpt import ChatGptService as chat_gpt
-from webservice.configuration.configuration import Configuration as config
+from webservice.chatgpt.chatgpt import ChatGptService
+from webservice.configuration.configuration import Configuration
 
 routes = web.RouteTableDef()
 
 router = routing.Router()
+config = Configuration()
 
 
 @router.register("pull_request", action="opened")
@@ -20,6 +21,7 @@ async def pr_opened_event(event, gh, *args, **kwargs):
     author = event.data["pull_request"]["user"]["login"]
     diff_url = event.data["pull_request"]["diff_url"]
     code_diff = await gh.post(diff_url)
+    chat_gpt = ChatGptService()
     chat_gpt.generate_response(code_diff=code_diff)
 
     message = f"Thanks for the report @{author}! I will look into it ASAP! (I'm a bot)."
