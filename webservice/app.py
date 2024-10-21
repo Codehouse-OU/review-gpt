@@ -12,6 +12,15 @@ config = Configuration()
 logging.basicConfig(level=logging.DEBUG)
 
 
+@app.route('/description', methods=['GET'])
+def bot_description():
+    description = {
+        "name": "GitHub Webhook Bot",
+        "purpose": "This bot processes GitHub pull request webhooks, fetches the diff content, generates comments using ChatGPT, and labels the pull request as 'bot_reviewed'."
+    }
+    return jsonify(description), 200
+
+
 @app.route('/', methods=['POST'])
 def github_webhook():
     payload = request.json
