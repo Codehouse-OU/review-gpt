@@ -59,3 +59,14 @@ class RepositoryInterface:
         :return str:
         """
         pass
+
+    def is_valid_request(self, request_data, headers, secret: str) -> bool:
+        """
+        Check if the payload is valid
+
+        :param request_data:
+        :param headers:
+        :param secret:
+        :return bool:
+        """
+        pass

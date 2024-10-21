@@ -10,6 +10,7 @@ class Configuration:
     api_version = None
     system_message = None
     label = None
+    secret_token = None
 
     def __init__(self):
         self.github_api_url = os.environ.get("GH_API", "https://api.github.com")
@@ -19,6 +20,7 @@ class Configuration:
         self.model_name = os.environ.get("MODEL_NAME")
         self.api_version = os.environ.get("API_VERSION")
         self.label = os.environ.get("LABEL", "bot_reviewed")
+        self.secret_token = os.environ.get("SECRET_TOKEN", "")
         self.system_message = {
             "role": "system",
             "content": os.environ.get("PROMPT",

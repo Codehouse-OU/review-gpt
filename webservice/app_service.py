@@ -12,6 +12,15 @@ class AppService:
         self._repository_interface = repository_interface
         self._review_interface = review_interface
 
+    def is_valid_request(self, request) -> bool:
+        """
+        Validate the request
+
+        :param request:
+        :return bool:
+        """
+        return self._repository_interface.is_valid_request(request.data, request.headers, self._config.secret_token)
+
     def execute(self, payload) -> int:
         """
         Execute the application logic

@@ -1,4 +1,6 @@
 import requests
+import hashlib
+import hmac
 
 from webservice.repository_interface import RepositoryInterface
 
@@ -39,6 +41,31 @@ class GitHubService(RepositoryInterface):
             return response.text if method == 'GET' else None
         else:
             response.raise_for_status()
+
+    def is_valid_request(self, request_data, headers, secret_token) -> bool:
+        """
+        Verify that the payload was sent from GitHub by validating SHA256.
+        @see: https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries
+        Returns false if there is a problem with validation. Validation can be skipped when secret_token is not provided.
+
+        Args:
+            request_data: original request body to verify (request.body())
+            headers: headers received from GitHub (including x-hub-signature-256)
+            secret_token: GitHub app webhook token (WEBHOOK_SECRET)
+            :return bool:
+        """
+        signature_header = headers.get('X-Hub-Signature-256')
+        if not secret_token or secret_token == "":
+            if signature_header:
+                return False
+
+        if not signature_header or not signature_header.startswith('sha256='):
+            return False
+        hash_object = hmac.new(secret_token.encode('utf-8'), msg=request_data, digestmod=hashlib.sha256)
+        expected_signature = "sha256=" + hash_object.hexdigest()
+        if not hmac.compare_digest(expected_signature, signature_header):
+            return False
+        return True
 
     @staticmethod
     def is_supported_payload(payload):
