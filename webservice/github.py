@@ -1,7 +1,12 @@
 import requests
 
+from webservice.repository_interface import RepositoryInterface
 
-class GitHubService:
+
+class GitHubService(RepositoryInterface):
+    """
+    Service class for interacting with GitHub API
+    """
     def __init__(self, config):
         self.config = config
 
@@ -34,3 +39,15 @@ class GitHubService:
             return response.text if method == 'GET' else None
         else:
             response.raise_for_status()
+
+    @staticmethod
+    def is_supported_payload(payload):
+        return payload.get('action') == 'opened' and 'pull_request' in payload
+    
+    @staticmethod
+    def get_repo_name(payload):
+        return payload['repository']['full_name']
+    
+    @staticmethod
+    def get_pull_number(payload):
+        return payload['pull_request']['number']
