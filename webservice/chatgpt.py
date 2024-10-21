@@ -1,5 +1,5 @@
 from openai import AzureOpenAI
-from webservice.configuration.configuration import Configuration
+from configuration import Configuration
 config = Configuration()
 
 class ChatGptService(object):

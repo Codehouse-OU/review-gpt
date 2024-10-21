@@ -1,5 +1,6 @@
 # Use an official Python runtime as a parent image
 FROM python:3.12-slim
+LABEL maintainer="Markus Karileet <markus.karileet@codehouse.ee>"
 
 # Set environment variables for security
 ENV PYTHONUNBUFFERED=1 \
@@ -23,7 +24,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY --chown=appuser:appuser webservice /home/appuser/webservice
 
 # Expose the port the app runs on
-EXPOSE 8080
+EXPOSE 5000
 
 # Run the application
-CMD ["python", "-m", "webservice"]
+CMD ["python", "webservice/app.py"]

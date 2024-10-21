@@ -4,12 +4,12 @@ services:
   review-gpt:
     image: codehouseou/review-gpt:latest
     environment:
-      - GH_SECRET=${GH_SECRET}
       - GH_AUTH=${GH_AUTH}
-      - GH_USER=${GH_USER}
       - ENDPOINT=${ENDPOINT}
       - API_KEY=${API_KEY}
       - MODEL_NAME=${MODEL_NAME}
       - API_VERSION=${API_VERSION}
+#      - GH_API=${GH_API}
+#      - PROMPT=${PROMPT}
     ports:
-      - "8080:8080"
+      - "8080:5000"
