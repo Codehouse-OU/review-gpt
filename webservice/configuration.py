@@ -23,7 +23,7 @@ class Configuration:
             "role": "system",
             "content": os.environ.get("PROMPT",
                                       "Purpose: You are to review code modifications to determine if they need corrections. If the "
-                                      "modifications are correct and require no further changes, return: 'NO_COMMENTS'. If "
+                                      "modifications are correct and require no further changes, respond simply with 'NO_COMMENTS'. If "
                                       "there are issues or areas that need attention, provide specific feedback indicating the "
                                       "problems and suggestions for improvement.  Review Criteria:  Code Quality: Ensure the code "
                                       "follows best practices, is readable, and maintainable. Functionality: Verify that the code "
