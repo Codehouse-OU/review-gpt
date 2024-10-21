@@ -20,6 +20,7 @@ To run the project, you can use Docker Compose. Below are the required and optio
 
 - `GH_API`: To change the GitHub API (useful for on-premise GitHub instances).
 - `PROMPT`: To adjust the system prompt that the OpenAI model receives.
+- `LABEL`: To override the label `bot_reviewed` that the bot puts on the pull request.
 
 ### Docker Compose Configuration
 
@@ -37,8 +38,12 @@ services:
       - API_KEY=${API_KEY}
       - MODEL_NAME=${MODEL_NAME}
       - API_VERSION=${API_VERSION}
-#      - GH_API=${GH_API}
-#      - PROMPT=${PROMPT}
+      # Optional: override GitHub label that the bot puts to the pull request
+      #      - LABEL=${LABEL}
+      # Optional: define GitHub instance API url
+      #      - GH_API=${GH_API}
+      # Optional: define the system prompt for the LLM model
+    #      - PROMPT=${PROMPT}
     ports:
       - "8080:5000"
 ```
