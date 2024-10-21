@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project is a bot designed to perform code reviews when GitHub sends a `pull_request` opened webhook. The bot fetches the code differences from the pull request, analyzes them using an OpenAI model, and posts comments on the pull request with feedback or simply states "no comments" if no issues are found.
+This project is a bot designed to perform code reviews when repository sends a `pull_request` opened webhook. The bot fetches the code differences from the pull request, analyzes them using an OpenAI model, and posts comments on the pull request with feedback or simply states "no comments" if no issues are found.
 
 ## How to Run
 
@@ -10,7 +10,7 @@ To run the project, you can use Docker Compose. Below are the required and optio
 
 ### Required Environment Variables
 
-- `GH_AUTH`: OAuth token for GitHub.
+- `GH_AUTH`: OAuth token for repository.
 - `ENDPOINT`: Azure OpenAI endpoint.
 - `API_KEY`: Azure OpenAI API key.
 - `MODEL_NAME`: The model name, such as `gpt4`.
@@ -18,9 +18,10 @@ To run the project, you can use Docker Compose. Below are the required and optio
 
 ### Optional Environment Variables
 
-- `GH_API`: To change the GitHub API (useful for on-premise GitHub instances).
+- `GH_API`: To change the Repository API (useful for on-premise repository instances).
 - `PROMPT`: To adjust the system prompt that the OpenAI model receives.
 - `LABEL`: To override the label `bot_reviewed` that the bot puts on the pull request.
+- `SECRET_TOKEN`: When applicable, the secret token for the Repository webhook.
 
 ### Docker Compose Configuration
 
@@ -38,12 +39,12 @@ services:
       - API_KEY=${API_KEY}
       - MODEL_NAME=${MODEL_NAME}
       - API_VERSION=${API_VERSION}
-      # Optional: override GitHub label that the bot puts to the pull request
+      # Optional: override repository label that the bot puts to the pull request
       #      - LABEL=${LABEL}
-      # Optional: define GitHub instance API url
+      # Optional: define repository instance API url
       #      - GH_API=${GH_API}
       # Optional: define the system prompt for the LLM model
-    #      - PROMPT=${PROMPT}
+      #      - PROMPT=${PROMPT}
     ports:
       - "8080:5000"
 ```
@@ -54,4 +55,4 @@ To run the project, execute the following command:
 docker-compose up
 ```
 
-This will start the bot and it will be ready to process pull request opened webhooks from GitHub.
+This will start the bot, and it will be ready to process pull request opened webhooks from repository.

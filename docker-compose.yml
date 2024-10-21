@@ -9,6 +9,7 @@ services:
       - API_KEY=${API_KEY}
       - MODEL_NAME=${MODEL_NAME}
       - API_VERSION=${API_VERSION}
+      - SECRET_TOKEN=${SECRET_TOKEN}
       # Optional: override GitHub label that the bot puts to the pull request
 #      - LABEL=${LABEL}
       # Optional: define GitHub instance API url

@@ -3,8 +3,8 @@ import os
 from flask import Flask, request, jsonify
 from chatgpt import ChatGptService
 from configuration import Configuration
-from github import GitHubService
 from webservice.app_service import AppService
+from webservice.github import GitHubService
 
 app = Flask(__name__)
 config = Configuration()
@@ -26,10 +26,15 @@ def bot_description():
 def bot_webhook():
     payload = request.json
     logging.debug(f'Payload received: {payload}')
+    if not app_service.is_valid_request(request):
+        logging.error('Invalid request')
+        return jsonify({'message': 'Invalid request'}), 400
     result = app_service.execute(payload)
     if result >= 0:
+        logging.debug(f'PR reviewed successfully with code: {result}')
         return jsonify({'message': 'PR reviewed'}), 200
     else:
+        logging.error(f'Error processing PR with code: {result}')
         return jsonify({'message': 'Error processing PR'}), 400
 
 
