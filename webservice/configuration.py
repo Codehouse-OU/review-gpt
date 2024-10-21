@@ -9,6 +9,7 @@ class Configuration:
     model_name = None
     api_version = None
     system_message = None
+    label = None
 
     def __init__(self):
         self.github_api_url = os.environ.get("GH_API", "https://api.github.com")
@@ -17,6 +18,7 @@ class Configuration:
         self.key = os.environ.get("API_KEY")
         self.model_name = os.environ.get("MODEL_NAME")
         self.api_version = os.environ.get("API_VERSION")
+        self.label = os.environ.get("LABEL", "bot_reviewed")
         self.system_message = {
             "role": "system",
             "content": os.environ.get("PROMPT", "Purpose: You are to review code modifications to determine if they need corrections. If the "

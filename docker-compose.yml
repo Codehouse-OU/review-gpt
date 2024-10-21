@@ -2,14 +2,16 @@ version: '3.8'
 
 services:
   review-gpt:
-    image: codehouseou/review-gpt:1.0.7
+    image: codehouseou/review-gpt:latest
     environment:
       - GH_AUTH=${GH_AUTH}
       - ENDPOINT=${ENDPOINT}
       - API_KEY=${API_KEY}
       - MODEL_NAME=${MODEL_NAME}
       - API_VERSION=${API_VERSION}
-      # Optional: define Github instance API url
+      # Optional: override GitHub label that the bot puts to the pull request
+#      - LABEL=${LABEL}
+      # Optional: define GitHub instance API url
 #      - GH_API=${GH_API}
       # Optional: define the system prompt for the LLM model
 #      - PROMPT=${PROMPT}
