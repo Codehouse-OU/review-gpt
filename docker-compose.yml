@@ -9,7 +9,9 @@ services:
       - API_KEY=${API_KEY}
       - MODEL_NAME=${MODEL_NAME}
       - API_VERSION=${API_VERSION}
+      # Optional: define Github instance API url
 #      - GH_API=${GH_API}
+      # Optional: define the system prompt for the LLM model
 #      - PROMPT=${PROMPT}
     ports:
       - "8080:5000"
