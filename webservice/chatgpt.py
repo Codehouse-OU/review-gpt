@@ -1,7 +1,9 @@
 from openai import AzureOpenAI
 
+from webservice.review_interface import ReviewInterface
 
-class ChatGptService:
+
+class ChatGptService(ReviewInterface):
     def __init__(self, config):
         self.config = config
         self.client = AzureOpenAI(
@@ -10,7 +12,7 @@ class ChatGptService:
             api_key=config.key
         )
 
-    def generate_response(self, code_diff):
+    def review(self, code_diff):
         completion = self.client.chat.completions.create(
             model=self.config.model_name,
             messages=[self.config.system_message, {"role": "user", "content": code_diff}],
