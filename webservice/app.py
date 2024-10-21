@@ -26,9 +26,10 @@ def github_webhook():
             logging.debug(f'Diff fetched successfully:\n{diff}')
             chat_gpt = ChatGptService()
             message = chat_gpt.generate_response(code_diff=diff)
-            if message == "no comments":
-                logging.info("No comments to add")
-                return jsonify({'message': 'No comments to add'}), 200
+            add_label_to_pull_request(repo_full_name, pull_number, "bot_reviewed")
+            if message == "NO_COMMENTS":
+                    logging.info("No comments to add")
+                    return jsonify({'message': 'No comments to add'}), 200
 
             post_comment_to_pull_request(repo_full_name, pull_number, message)
             return jsonify({'message': 'Diff fetched and comment posted successfully'}), 200
@@ -37,6 +38,15 @@ def github_webhook():
             return jsonify({'message': f'Error processing pull request: {e}'}), 500
 
     return jsonify({'message': 'Not a pull request opened event'}), 400
+
+
+def add_label_to_pull_request(repo_full_name, pull_number, label):
+    github_api_request(
+        f'{config.github_api_url}/repos/{repo_full_name}/issues/{pull_number}/labels',
+        method='POST',
+        json={'labels': [label]}
+    )
+    logging.debug('Label added successfully')
 
 
 def fetch_diff_from_github(repo_full_name, pull_number):
