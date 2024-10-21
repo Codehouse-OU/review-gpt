@@ -2,3 +2,4 @@
 /.idea/
 /venv/
 /configuration.env
+__pycache__/
