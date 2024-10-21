@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   review-gpt:
-    image: codehouseou/review-gpt:latest
+    image: codehouseou/review-gpt:1.0.11
     environment:
       - GH_AUTH=${GH_AUTH}
       - ENDPOINT=${ENDPOINT}

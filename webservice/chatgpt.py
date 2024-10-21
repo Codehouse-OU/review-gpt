@@ -1,10 +1,9 @@
 from openai import AzureOpenAI
-from configuration import Configuration
-config = Configuration()
 
 
-class ChatGptService(object):
-    def __init__(self):
+class ChatGptService:
+    def __init__(self, config):
+        self.config = config
         self.client = AzureOpenAI(
             azure_endpoint=config.endpoint,
             api_version=config.api_version,
@@ -13,7 +12,7 @@ class ChatGptService(object):
 
     def generate_response(self, code_diff):
         completion = self.client.chat.completions.create(
-            model=config.model_name,
-            messages=[config.system_message, {"role": "user", "content": code_diff}],
+            model=self.config.model_name,
+            messages=[self.config.system_message, {"role": "user", "content": code_diff}],
         )
         return completion.choices[0].message.content
