@@ -12,7 +12,7 @@ config = Configuration()
 logging.basicConfig(level=logging.DEBUG)
 
 
-@app.route('/description', methods=['GET'])
+@app.route('/', methods=['GET'])
 def bot_description():
     description = {
         "name": "GitHub Webhook Bot",
