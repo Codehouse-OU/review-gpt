@@ -34,7 +34,10 @@ async def ping(event, gh, *args, **kwargs):
 async def main(request):
     body = await request.read()
     try:
-        event = sansio.Event.from_http(request.headers, body, secret=config.secret)
+        if config.secret is None:
+            event = sansio.Event.from_http(request.headers, body)
+        else:
+            event = sansio.Event.from_http(request.headers, body, secret=config.secret)
         async with aiohttp.ClientSession() as session:
             gh = gh_aiohttp.GitHubAPI(session, config.user, oauth_token=config.oauth_token)
             await router.dispatch(event, gh)
