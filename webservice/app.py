@@ -29,8 +29,8 @@ def github_webhook():
             message = chat_gpt.generate_response(code_diff=diff)
             add_label_to_pull_request(repo_full_name, pull_number, config.label)
             if message == "NO_COMMENTS":
-                    logging.info("No comments to add")
-                    return jsonify({'message': 'No comments to add'}), 200
+                logging.info("No comments to add")
+                return jsonify({'message': 'No comments to add'}), 200
 
             post_comment_to_pull_request(repo_full_name, pull_number, message)
             return jsonify({'message': 'Diff fetched and comment posted successfully'}), 200

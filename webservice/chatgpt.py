@@ -2,6 +2,7 @@ from openai import AzureOpenAI
 from configuration import Configuration
 config = Configuration()
 
+
 class ChatGptService(object):
     def __init__(self):
         self.client = AzureOpenAI(
