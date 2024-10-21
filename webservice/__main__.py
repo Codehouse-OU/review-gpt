@@ -18,13 +18,10 @@ config = Configuration()
 @router.register("pull_request", action="opened")
 async def pr_opened_event(event, gh, *args, **kwargs):
     url = event.data["pull_request"]["comments_url"]
-    author = event.data["pull_request"]["user"]["login"]
     diff_url = event.data["pull_request"]["diff_url"]
-    code_diff = await gh.post(diff_url)
+    code_diff = await gh.getitem(diff_url)
     chat_gpt = ChatGptService()
-    chat_gpt.generate_response(code_diff=code_diff)
-
-    message = f"Thanks for the report @{author}! I will look into it ASAP! (I'm a bot)."
+    message = chat_gpt.generate_response(code_diff=code_diff)
     await gh.post(url, data={"body": message})
 
 @router.register("ping")
@@ -36,11 +33,14 @@ async def ping(event, gh, *args, **kwargs):
 @routes.post("/")
 async def main(request):
     body = await request.read()
+    try:
+        event = sansio.Event.from_http(request.headers, body, secret=config.secret)
+        async with aiohttp.ClientSession() as session:
+            gh = gh_aiohttp.GitHubAPI(session, config.user, oauth_token=config.oauth_token)
+            await router.dispatch(event, gh)
+    except Exception as e:
+        return web.Response(status=400, body=str(e))
 
-    event = sansio.Event.from_http(request.headers, body, secret=config.secret)
-    async with aiohttp.ClientSession() as session:
-        gh = gh_aiohttp.GitHubAPI(session, config.user, oauth_token=config.oauth_token)
-        await router.dispatch(event, gh)
     return web.Response(status=200)
 
 
