@@ -1,3 +1,4 @@
+import json
 from reviewgpt.configuration import Configuration
 from reviewgpt.repository.repository_interface import RepositoryInterface
 from reviewgpt.review.review_interface import ReviewInterface
@@ -37,9 +38,11 @@ class AppService:
                 message = self._review.execute(code_diff)
                 self._repository.add_label(repo_full_name, pull_number, self._config.repository_label)
                 if message == "NO_COMMENTS":
+                    self._repository.post_comment(repo_full_name, pull_number, self._config.good_job_message)
                     return 0
-        
-                self._repository.post_comment(repo_full_name, pull_number, message)
+
+                comments_array = json.loads(message)
+                self._repository.post_review_comments(repo_full_name, pull_number, comments_array, self._repository.get_head_commit_sha(payload))
                 return 1
             except Exception as e:
                 return -1

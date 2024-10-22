@@ -30,6 +30,17 @@ class RepositoryInterface:
         """
         pass
 
+    def post_review_comments(self, repo_full_name, pull_number, content, commit_sha) -> None:
+        """
+        Post a list of review comments to the pull request
+
+        :param repo_full_name:
+        :param pull_number:
+        :param content:
+        :param commit_sha:
+        """
+        pass
+
     @staticmethod
     def is_supported_payload(payload) -> bool:
         """
@@ -54,6 +65,16 @@ class RepositoryInterface:
     def get_pull_number(payload) -> str:
         """
         Get the pull request number from the payload
+
+        :param payload:
+        :return str:
+        """
+        pass
+
+    @staticmethod
+    def get_head_commit_sha(payload) -> str:
+        """
+        Get the head commit SHA from the payload
 
         :param payload:
         :return str:

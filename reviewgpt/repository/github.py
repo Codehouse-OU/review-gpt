@@ -32,6 +32,15 @@ class GitHubService(RepositoryInterface):
             json={'body': comment_body}
         )
 
+    def post_review_comments(self, repo_full_name, pull_number, comments, commit_sha):
+        for comment in comments:
+            comment['commit_id'] = commit_sha
+            self._github_api_request(
+                f'{self.config.repository_api_url}/repos/{repo_full_name}/pulls/{pull_number}/comments',
+                method='POST',
+                json=comment
+            )
+
     def _github_api_request(self, url, method='GET', headers=None, json=None):
         headers = headers or {}
         headers['Authorization'] = f'token {self.config.repository_oauth_token}'
@@ -71,3 +80,7 @@ class GitHubService(RepositoryInterface):
     @staticmethod
     def get_pull_number(payload):
         return payload['pull_request']['number']
+
+    @staticmethod
+    def get_head_commit_sha(payload):
+        return payload['pull_request']['head']['sha']
