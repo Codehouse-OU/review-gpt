@@ -1,4 +1,4 @@
-from review_interface import ReviewInterface
+from reviewgpt.review.review_interface import ReviewInterface
 
 
 class DummyReview(ReviewInterface):

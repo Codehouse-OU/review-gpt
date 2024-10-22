@@ -1,10 +1,10 @@
 import logging
 import os
 from flask import Flask, request, jsonify
-from configuration import Configuration
-from app_service import AppService
-from review_factory import ReviewFactory
-from repository_factory import RepositoryFactory
+from reviewgpt.configuration import Configuration
+from reviewgpt.app_service import AppService
+from reviewgpt.review.review_factory import ReviewFactory
+from reviewgpt.repository.repository_factory import RepositoryFactory
 
 app = Flask(__name__)
 config = Configuration()

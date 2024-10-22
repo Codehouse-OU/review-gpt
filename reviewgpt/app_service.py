@@ -1,6 +1,6 @@
-from configuration import Configuration
-from repository_interface import RepositoryInterface
-from review_interface import ReviewInterface
+from reviewgpt.configuration import Configuration
+from reviewgpt.repository.repository_interface import RepositoryInterface
+from reviewgpt.review.review_interface import ReviewInterface
 
 
 class AppService:

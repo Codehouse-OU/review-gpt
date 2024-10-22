@@ -1,4 +1,4 @@
-from repository_interface import RepositoryInterface
+from reviewgpt.repository.repository_interface import RepositoryInterface
 
 
 class DummyRepository(RepositoryInterface):
