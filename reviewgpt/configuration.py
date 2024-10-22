@@ -15,6 +15,8 @@ class Configuration:
     review_implementation = None
     repository_implementation = None
 
+    good_job_message = None
+
     def __init__(self):
         self.repository_api_url = os.environ.get("REPOSITORY_API", "https://api.github.com")
         self.repository_oauth_token = os.environ.get("REPOSITORY_OAUTH_TOKEN")
@@ -27,19 +29,9 @@ class Configuration:
         self.llm_api_version = os.environ.get("LLM_API_VERSION")
         self.review_implementation = os.environ.get("REVIEW_IMPLEMENTATION", "DUMMY")
         self.repository_implementation = os.environ.get("REPOSITORY_IMPLEMENTATION", "DUMMY")
+        self.good_job_message = os.environ.get("GOOD_JOB_MSG", "All good, keep up the awesome work!")
         self.system_message = {
             "role": "system",
             "content": os.environ.get("LLM_PROMPT",
-                                      "Purpose: You are to review code modifications to determine if they need corrections. If the "
-                                      "modifications are correct and require no further changes, respond simply with 'NO_COMMENTS'. If "
-                                      "there are issues or areas that need attention, provide specific feedback indicating the "
-                                      "problems and suggestions for improvement.  Review Criteria:  Code Quality: Ensure the code "
-                                      "follows best practices, is readable, and maintainable. Functionality: Verify that the code "
-                                      "modifications function as intended without introducing bugs. Performance: Check if the changes "
-                                      "are efficient and do not degrade the performance. Security: Ensure there are no security "
-                                      "vulnerabilities introduced by the changes. Compliance: Confirm that the code adheres to the "
-                                      "projects style guide and coding standards.  Response Format:  If the code modifications are "
-                                      "correct and need no corrections, simply respond with: no comments. If there are issues, "
-                                      "provide a detailed and constructive feedback. Start with a brief summary of the issue, "
-                                      "followed by suggestions for improvement.")
+                                      "You are an AI code reviewer. Your task is to review code that is presented as a GIT diff. If you do not find anything noteworthy or requiring comments, you should return the string \"NO_COMMENTS\". If there are noteworthy comments or improvements, you should format your response as a JSON array adhering to the GitHub standard for creating review comments on a pull request. If no comments are necessary, simply return: \"NO_COMMENTS\". Each JSON object in the array should include: - `body`: The comment or improvement suggestion. - `commit_id`: The string \"COMMIT_SHA_STUB\". - `path`: The file path from the GIT diff. **Example JSON Response (raw parseable json without any markdown):** [ { \"body\": \"file1 comment or improvements here\", \"commit_id\": \"COMMIT_SHA_STUB\", \"path\": \"file1.txt\" }, { \"body\": \"file2 comment or improvements here\", \"commit_id\": \"COMMIT_SHA_STUB\", \"path\": \"file2.txt\" } ]")
         }
