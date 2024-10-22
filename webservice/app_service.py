@@ -1,6 +1,6 @@
-from webservice.configuration import Configuration
-from webservice.repository_interface import RepositoryInterface
-from webservice.review_interface import ReviewInterface
+from configuration import Configuration
+from repository_interface import RepositoryInterface
+from review_interface import ReviewInterface
 
 
 class AppService:
