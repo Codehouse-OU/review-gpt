@@ -2,28 +2,29 @@ import os
 
 
 class Configuration:
-    github_api_url = None
-    oauth_token = None
-    endpoint = None
-    key = None
-    model_name = None
-    api_version = None
+    repository_api_url = None
+    repository_oauth_token = None
+    llm_endpoint = None
+    llm_api_key = None
+    llm_model_name = None
+    llm_api_version = None
     system_message = None
-    label = None
-    secret_token = None
+    repository_label = None
+    webhook_secret = None
 
     def __init__(self):
-        self.github_api_url = os.environ.get("GH_API", "https://api.github.com")
-        self.oauth_token = os.environ.get("GH_AUTH")
-        self.endpoint = os.environ.get("ENDPOINT")
-        self.key = os.environ.get("API_KEY")
-        self.model_name = os.environ.get("MODEL_NAME")
-        self.api_version = os.environ.get("API_VERSION")
-        self.label = os.environ.get("LABEL", "bot_reviewed")
-        self.secret_token = os.environ.get("SECRET_TOKEN", "")
+        self.repository_api_url = os.environ.get("REPOSITORY_API", "https://api.github.com")
+        self.repository_oauth_token = os.environ.get("REPOSITORY_OAUTH_TOKEN")
+        self.webhook_secret = os.environ.get("WEBHOOK_SECRET", "")
+        self.repository_label = os.environ.get("REPOSITORY_LABEL", "bot_reviewed")
+
+        self.llm_endpoint = os.environ.get("LLM_ENDPOINT")
+        self.llm_api_key = os.environ.get("LLM_API_KEY")
+        self.llm_model_name = os.environ.get("LLM_MODEL_NAME")
+        self.llm_api_version = os.environ.get("LLM_API_VERSION")
         self.system_message = {
             "role": "system",
-            "content": os.environ.get("PROMPT",
+            "content": os.environ.get("LLM_PROMPT",
                                       "Purpose: You are to review code modifications to determine if they need corrections. If the "
                                       "modifications are correct and require no further changes, respond simply with 'NO_COMMENTS'. If "
                                       "there are issues or areas that need attention, provide specific feedback indicating the "
