@@ -15,6 +15,8 @@ To run the project, you can use Docker Compose. Below are the required and optio
 - `LLM_API_KEY`: LLM model API key.
 - `LLM_MODEL_NAME`: The LLM model name, such as `gpt4`.
 - `LLM_API_VERSION`: LLM API version.
+- `REVIEW_IMPLEMENTATION`: The review implementation to use (AZURE, DUMMY, etc).
+- `REPOSITORY_IMPLEMENTATION`: The repository implementation to use (GITHUB, DUMMY, etc).
 
 ### Optional Environment Variables
 
@@ -47,6 +49,8 @@ This will start the bot, and it will be ready to process pull request opened web
 ## Development Principles
 
 ### Extending the System with New Review and Repository Classes
+
+ > Ensure all required dependencies for the new class are installed. You can update the `requirements.txt` or provide installation instructions.
 
 To extend the system with new review and repository classes, follow these steps:
 
@@ -130,5 +134,3 @@ To configure which implementation is used, set the following parameters in your 
 
 - `REVIEW_IMPLEMENTATION`: Specifies the review implementation to use. Possible values: `DUMMY`, `AZURE`, `NEW`, etc.
 - `REPOSITORY_IMPLEMENTATION`: Specifies the repository implementation to use. Possible values: `DUMMY`, `GITHUB`, `NEW`, etc.
-
-Example `configuration.env`:
