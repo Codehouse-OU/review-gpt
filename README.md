@@ -44,3 +44,91 @@ docker compose up
 ```
 
 This will start the bot, and it will be ready to process pull request opened webhooks from repository on root path.
+## Development Principles
+
+### Extending the System with New Review and Repository Classes
+
+To extend the system with new review and repository classes, follow these steps:
+
+1. **Create New Review Class**:
+    - Implement the `ReviewInterface` for the new review class.
+    - Add the new class to the `ReviewFactory`.
+
+2. **Create New Repository Class**:
+    - Implement the `RepositoryInterface` for the new repository class.
+    - Add the new class to the `RepositoryFactory`.
+
+### Example: Adding a New Review Class
+
+1. **Create the new review class**:
+    ```python
+    class NewReviewService(ReviewInterface):
+        def review(self, diff: str) -> str:
+            return "Review by NewReviewService"
+    ```
+
+2. **Update `ReviewFactory`**:
+    ```python
+    class ReviewFactory:
+        def get_review_service(self) -> ReviewInterface:
+            implementation_name = self.config.review_implementation.upper()
+            if implementation_name == 'DUMMY':
+                return DummyReview(self.config)
+            elif implementation_name == 'AZURE':
+                return ChatGptService(self.config)
+            elif implementation_name == 'NEW':
+                return NewReviewService(self.config)
+            else:
+                raise ValueError(f"Unknown review implementation: {implementation_name}")
+    ```
+
+### Example: Adding a New Repository Class
+
+1. **Create the new repository class**:
+    ```python
+    class NewRepositoryService(RepositoryInterface):
+        def fetch_diff(self, repo_full_name, pull_number) -> str:
+            return "Diff from NewRepositoryService"
+        
+        def add_label(self, repo_full_name, pull_number, label) -> None:
+            pass
+        
+        def post_comment(self, repo_full_name, pull_number, comment_body) -> None:
+            pass
+        
+        @staticmethod
+        def is_supported_payload(payload) -> bool:
+            return True
+        
+        @staticmethod
+        def get_repo_name(payload) -> str:
+            return "repo_name_new"
+        
+        @staticmethod
+        def get_pull_number(payload) -> str:
+            return "pull_number_new"
+    ```
+
+2. **Update `RepositoryFactory`**:
+    ```python
+    class RepositoryFactory:
+        def get_repository_service(self) -> RepositoryInterface:
+            implementation_name = self.config.repository_implementation.upper()
+            if implementation_name == 'DUMMY':
+                return DummyRepository(self.config)
+            elif implementation_name == 'GITHUB':
+                return GitHubService(self.config)
+            elif implementation_name == 'NEW':
+                return NewRepositoryService(self.config)
+            else:
+                raise ValueError(f"Unknown repository implementation: {implementation_name}")
+    ```
+
+### Configuration Parameters
+
+To configure which implementation is used, set the following parameters in your configuration:
+
+- `REVIEW_IMPLEMENTATION`: Specifies the review implementation to use. Possible values: `DUMMY`, `AZURE`, `NEW`, etc.
+- `REPOSITORY_IMPLEMENTATION`: Specifies the repository implementation to use. Possible values: `DUMMY`, `GITHUB`, `NEW`, etc.
+
+Example `configuration.env`:

@@ -1,15 +1,17 @@
 import logging
 import os
 from flask import Flask, request, jsonify
-from chatgpt import ChatGptService
 from configuration import Configuration
 from app_service import AppService
-from dummy_repository import DummyRepository
-from github import GitHubService
+from review_factory import ReviewFactory
+from repository_factory import RepositoryFactory
 
 app = Flask(__name__)
 config = Configuration()
-app_service = AppService(config, GitHubService(config), ChatGptService(config))
+configured_review = ReviewFactory(config).get_review_service()
+configured_repository = RepositoryFactory(config).get_repository_service()
+
+app_service = AppService(config, configured_repository, configured_review)
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
 

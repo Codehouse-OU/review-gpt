@@ -12,6 +12,9 @@ class Configuration:
     repository_label = None
     webhook_secret = None
 
+    review_implementation = None
+    repository_implementation = None
+
     def __init__(self):
         self.repository_api_url = os.environ.get("REPOSITORY_API", "https://api.github.com")
         self.repository_oauth_token = os.environ.get("REPOSITORY_OAUTH_TOKEN")
@@ -22,6 +25,8 @@ class Configuration:
         self.llm_api_key = os.environ.get("LLM_API_KEY")
         self.llm_model_name = os.environ.get("LLM_MODEL_NAME")
         self.llm_api_version = os.environ.get("LLM_API_VERSION")
+        self.review_implementation = os.environ.get("REVIEW_IMPLEMENTATION", "DUMMY")
+        self.repository_implementation = os.environ.get("REPOSITORY_IMPLEMENTATION", "DUMMY")
         self.system_message = {
             "role": "system",
             "content": os.environ.get("LLM_PROMPT",
