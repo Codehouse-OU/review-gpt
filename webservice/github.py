@@ -2,7 +2,7 @@ import requests
 import hashlib
 import hmac
 
-from webservice.repository_interface import RepositoryInterface
+from repository_interface import RepositoryInterface
 
 
 class GitHubService(RepositoryInterface):
@@ -42,30 +42,23 @@ class GitHubService(RepositoryInterface):
         else:
             response.raise_for_status()
 
-    def is_valid_request(self, request_data, headers, secret_token) -> bool:
-        """
-        Verify that the payload was sent from GitHub by validating SHA256.
-        @see: https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries
-        Returns false if there is a problem with validation. Validation can be skipped when secret_token is not provided.
-
-        Args:
-            request_data: original request body to verify (request.body())
-            headers: headers received from GitHub (including x-hub-signature-256)
-            secret_token: GitHub app webhook token (WEBHOOK_SECRET)
-            :return bool:
-        """
-        signature_header = headers.get('X-Hub-Signature-256')
-        if not secret_token or secret_token == "":
-            if signature_header:
-                return False
-
-        if not signature_header or not signature_header.startswith('sha256='):
+    def is_valid_request(self, request_data_bytes: bytes, headers, secret: str) -> bool:
+        incoming_signature = headers.get('x-hub-signature-256')
+        calculated_signature = self.calculate_signature(secret, request_data_bytes)
+        if not hmac.compare_digest(calculated_signature, incoming_signature):
             return False
-        hash_object = hmac.new(secret_token.encode('utf-8'), msg=request_data, digestmod=hashlib.sha256)
-        expected_signature = "sha256=" + hash_object.hexdigest()
-        if not hmac.compare_digest(expected_signature, signature_header):
-            return False
-        return True
+        else:
+            return True
+
+    @staticmethod
+    def calculate_signature(secret, payload_bytes) -> str:
+        """
+        Signature calculator
+        """
+        signature_bytes = bytes(secret, 'utf-8')
+        digest = hmac.new(key=signature_bytes, msg=payload_bytes, digestmod=hashlib.sha256)
+        signature = "sha256=" + digest.hexdigest()
+        return signature
 
     @staticmethod
     def is_supported_payload(payload):

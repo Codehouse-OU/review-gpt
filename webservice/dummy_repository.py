@@ -1,7 +1,7 @@
 import hashlib
-
-from webservice.repository_interface import RepositoryInterface
+import re
 import hmac
+from repository_interface import RepositoryInterface
 
 
 class DummyRepository(RepositoryInterface):
@@ -32,16 +32,20 @@ class DummyRepository(RepositoryInterface):
     def get_pull_number(payload) -> str:
         return '1'
 
-    def is_valid_request(self, request_data, headers, secret_token) -> bool:
-        signature_header = headers.get('X-Hub-Signature-256')
-        if not secret_token or secret_token == "":
-            if signature_header:
-                return False
+    def is_valid_request(self, request_data_bytes: bytes, headers, secret: str) -> bool:
+        incoming_signature = headers.get('x-hub-signature-256')
+        calculated_signature = self.calculate_signature(secret, request_data_bytes)
+        if not hmac.compare_digest(calculated_signature, incoming_signature):
+            return False
+        else:
+            return True
 
-        if not signature_header or not signature_header.startswith('sha256='):
-            return False
-        hash_object = hmac.new(secret_token.encode('utf-8'), msg=request_data, digestmod=hashlib.sha256)
-        expected_signature = "sha256=" + hash_object.hexdigest()
-        if not hmac.compare_digest(expected_signature, signature_header):
-            return False
-        return True
+    @staticmethod
+    def calculate_signature(secret, payload_bytes) -> str:
+        """
+        Signature calculator
+        """
+        signature_bytes = bytes(secret, 'utf-8')
+        digest = hmac.new(key=signature_bytes, msg=payload_bytes, digestmod=hashlib.sha256)
+        signature = "sha256=" + digest.hexdigest()
+        return signature

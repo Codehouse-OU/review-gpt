@@ -1,6 +1,6 @@
 from openai import AzureOpenAI
 
-from webservice.review_interface import ReviewInterface
+from review_interface import ReviewInterface
 
 
 class ChatGptService(ReviewInterface):
