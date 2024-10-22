@@ -1,15 +1,14 @@
 import logging
 
-from configuration import Configuration
-from dummy_repository import DummyRepository
-from github import GitHubService
-from repository_interface import RepositoryInterface
+from reviewgpt.repository.dummy_repository import DummyRepository
+from reviewgpt.repository.github import GitHubService
+from reviewgpt.repository.repository_interface import RepositoryInterface
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
 
 
 class RepositoryFactory:
-    def __init__(self, config: Configuration):
+    def __init__(self, config):
         self.config = config
 
     def get_repository_service(self) -> RepositoryInterface:

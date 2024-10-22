@@ -2,7 +2,7 @@ import requests
 import hashlib
 import hmac
 
-from repository_interface import RepositoryInterface
+from reviewgpt.repository.repository_interface import RepositoryInterface
 
 
 class GitHubService(RepositoryInterface):

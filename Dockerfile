@@ -21,10 +21,11 @@ COPY --chown=appuser:appuser requirements.txt /home/appuser/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code
-COPY --chown=appuser:appuser webservice /home/appuser/webservice
+COPY --chown=appuser:appuser app.py /home/appuser/
+COPY --chown=appuser:appuser reviewgpt /home/appuser/reviewgpt
 
 # Expose the port the app runs on
 EXPOSE 5000
 
 # Run the application
-CMD ["python", "webservice/app.py"]
+CMD ["python", "app.py"]

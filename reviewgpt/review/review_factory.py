@@ -1,15 +1,15 @@
 import logging
 
-from chatgpt import ChatGptService
-from dummy_review import DummyReview
-from review_interface import ReviewInterface
-from webservice.configuration import Configuration
+from reviewgpt.review.chatgpt import ChatGptService
+from reviewgpt.review.dummy_review import DummyReview
+from reviewgpt.review.review_interface import ReviewInterface
+
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
 
 
 class ReviewFactory:
-    def __init__(self, config: Configuration):
+    def __init__(self, config):
         self.config = config
 
     def get_review_service(self) -> ReviewInterface:
