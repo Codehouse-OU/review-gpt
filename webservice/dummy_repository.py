@@ -1,6 +1,3 @@
-import hashlib
-import re
-import hmac
 from repository_interface import RepositoryInterface
 
 
@@ -33,19 +30,4 @@ class DummyRepository(RepositoryInterface):
         return '1'
 
     def is_valid_request(self, request_data_bytes: bytes, headers, secret: str) -> bool:
-        incoming_signature = headers.get('x-hub-signature-256')
-        calculated_signature = self.calculate_signature(secret, request_data_bytes)
-        if not hmac.compare_digest(calculated_signature, incoming_signature):
-            return False
-        else:
-            return True
-
-    @staticmethod
-    def calculate_signature(secret, payload_bytes) -> str:
-        """
-        Signature calculator
-        """
-        signature_bytes = bytes(secret, 'utf-8')
-        digest = hmac.new(key=signature_bytes, msg=payload_bytes, digestmod=hashlib.sha256)
-        signature = "sha256=" + digest.hexdigest()
-        return signature
+        return True
