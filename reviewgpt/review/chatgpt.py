@@ -12,7 +12,7 @@ class ChatGptService(ReviewInterface):
             api_key=config.llm_api_key
         )
 
-    def execute(self, code_diff):
+    def review(self, code_diff):
         completion = self.client.chat.completions.create(
             model=self.config.llm_model_name,
             messages=[self.config.system_message, {"role": "user", "content": code_diff}],

@@ -8,5 +8,5 @@ class DummyReview(ReviewInterface):
     def __init__(self, config):
         self.config = config
 
-    def execute(self, code_diff):
+    def review(self, code_diff):
         return "NO_COMMENTS"
