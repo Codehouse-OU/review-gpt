@@ -19,7 +19,7 @@ class AppService:
         :param request:
         :return bool:
         """
-        return self._repository_interface.is_valid_request(request.data, request.headers, self._config.secret_token)
+        return self._repository_interface.is_valid_request(request.data, request.headers, self._config.webhook_secret)
 
     def execute(self, payload) -> int:
         """
@@ -35,7 +35,7 @@ class AppService:
             try:
                 code_diff = self._repository_interface.fetch_diff(repo_full_name, pull_number)
                 message = self._review_interface.review(code_diff)
-                self._repository_interface.add_label(repo_full_name, pull_number, self._config.label)
+                self._repository_interface.add_label(repo_full_name, pull_number, self._config.repository_label)
                 if message == "NO_COMMENTS":
                     return 0
         

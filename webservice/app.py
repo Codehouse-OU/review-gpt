@@ -41,7 +41,7 @@ def bot_webhook():
 
 
 if __name__ == '__main__':
-    logging.debug("{0}: {1}".format("ENDPOINT", os.environ.get("ENDPOINT")))
-    logging.debug("{0}: {1}".format("MODEL_NAME", os.environ.get("MODEL_NAME")))
-    logging.debug("{0}: {1}".format("API_VERSION", os.environ.get("API_VERSION")))
+    logging.debug("{0}: {1}".format("LLM_ENDPOINT", os.environ.get("LLM_ENDPOINT")))
+    logging.debug("{0}: {1}".format("LLM_MODEL_NAME", os.environ.get("LLM_MODEL_NAME")))
+    logging.debug("{0}: {1}".format("LLM_API_VERSION", os.environ.get("LLM_API_VERSION")))
     app.run(host='0.0.0.0', port=5000)
