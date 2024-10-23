@@ -1,3 +1,6 @@
+import json
+import time
+
 import requests
 import hashlib
 import hmac
@@ -34,12 +37,14 @@ class GitHubService(RepositoryInterface):
 
     def post_review_comments(self, repo_full_name, pull_number, comments, commit_sha):
         for comment in comments:
-            comment['commit_id'] = commit_sha
+            payload = {'body': comment['body'], 'commit_id': commit_sha, 'path': comment['path'], 'position': comment['position']}
             self._github_api_request(
                 f'{self.config.repository_api_url}/repos/{repo_full_name}/pulls/{pull_number}/comments',
+                headers={'Accept': 'application/vnd.github+json'},
                 method='POST',
-                json=comment
+                json=payload
             )
+            time.sleep(2)
 
     def _github_api_request(self, url, method='GET', headers=None, json=None):
         headers = headers or {}

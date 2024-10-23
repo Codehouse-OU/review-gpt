@@ -32,14 +32,14 @@ def bot_webhook():
 
     if not app_service.is_valid_request(request):
         logging.error('Invalid request')
-        return jsonify({'message': 'Invalid request'}), 400
+        return jsonify({'message': 'Invalid request'}), 401
     result = app_service.execute(payload)
     if result >= 0:
         logging.debug(f'PR reviewed successfully with code: {result}')
         return jsonify({'message': 'PR reviewed'}), 200
     else:
         logging.error(f'Error processing PR with code: {result}')
-        return jsonify({'message': 'Error processing PR'}), 400
+        return jsonify({'message': f'Error processing PR with code: {result}'}), 400
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   review-gpt:
-    image: codehouseou/review-gpt:1.1.1
+    image: codehouseou/review-gpt:2.0.1
     env_file:
       - configuration.env
     ports:
