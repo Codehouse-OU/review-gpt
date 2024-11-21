@@ -1,5 +1,4 @@
 import logging
-import json
 
 from reviewgpt.configuration import Configuration
 from reviewgpt.repository.repository_interface import RepositoryInterface
@@ -58,8 +57,8 @@ class AppService:
             return -5
 
         try:
-            comments_array = json.loads(message)
-            logging.debug(f'Parsed review comments: {comments_array}')
+            logging.debug(f'Parsed review comments: {message}')
+            comments_array = self._repository_service.post_process(code_diff, message)
             self._repository_service.post_review_comments(repo_full_name, pull_number, comments_array, self._repository_service.get_head_commit_sha(payload))
             return 1
         except Exception as e:

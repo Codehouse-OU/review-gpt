@@ -89,3 +89,41 @@ class GitHubService(RepositoryInterface):
     @staticmethod
     def get_head_commit_sha(payload):
         return payload['pull_request']['head']['sha']
+
+    def post_process(self, code_diff: str, comments) -> list:
+        """
+        In order to find the suggestion exact places in the code, we need to go through the comments, look at the line value, find this line in the code_diff and count the lines until this line from the path line.
+        """
+        comments = json.loads(comments)
+        comments = [comment for comment in comments if comment.get('line') is not None]
+        # process each comment
+        for comment in comments:
+            comment['position'] = self._find_position_in_diff(code_diff, comment['path'], comment['line'])
+
+        return comments
+
+    @staticmethod
+    def _find_position_in_diff(code_diff: str, path: str, to_change: str) -> int:
+        """
+        Find the position of the line in the diff
+        :param code_diff:
+        :param path:
+        :param to_change:
+        :return: line number as int
+        """
+        lines = code_diff.split('\n')
+        path_found = False
+        line_number = 0
+        for i, line in enumerate(lines):
+            # find the line that starts with '+++ b/' + path, e.g. is the diff for the file we are looking for
+            if line.startswith('+++ b/' + path):
+                if path_found:
+                    break
+                if path in line:
+                    path_found = True
+            if path_found:
+                line_number += 1
+                # if the line contains the "to_change" string, then we found the line number
+                if to_change in line:
+                    return line_number - 2 # -2 because the lines are counted from the file name not @@ -1,1 +1,1 @@
+        return 0

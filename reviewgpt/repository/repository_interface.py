@@ -91,3 +91,13 @@ class RepositoryInterface:
         :return bool:
         """
         pass
+
+    def post_process(self, code_diff: str, comments) -> list:
+        """
+        Do post-processing after the review
+
+        :param code_diff:
+        :param comments:
+        :return array:
+        """
+        pass
